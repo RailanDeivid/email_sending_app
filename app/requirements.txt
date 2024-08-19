@@ -2,3 +2,4 @@ streamlit==1.36.0
 pandas==2.2.2
 pip == 24.2
 openpyxl==3.1.5
+streamlit-option-menu ==0.3.13

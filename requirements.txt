@@ -4,3 +4,4 @@ pip == 24.2
 secure-smtplib == 0.1.1
 email == 4.0.2
 openpyxl==3.1.5
+streamlit-option-menu ==0.3.13
