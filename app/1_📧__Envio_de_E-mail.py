@@ -14,6 +14,8 @@ st.set_page_config(
     layout="wide"
 )
 
+
+
 def usar_credenciais():
     email = st.session_state.get("email", None)
     senha = st.session_state.get("senha", None)
@@ -25,6 +27,7 @@ def usar_credenciais():
     else:
         st.error("Nenhum email cadastrado. Por favor, cadastre o remetente na página de Cadastro de Remetente.")
         return False
+
 
 def enviar_emails():
     st.title("Envio de Emails em Massa")
@@ -84,12 +87,11 @@ def enviar_emails():
                 if uploaded_files:
                     file_names = [file.name for file in uploaded_files]
                     st.write("Arquivos carregados:")
-                    st.write(file_names)
+                    #st.write(file_names)
 
-                    # Adiciona a extensão .xlsx aos nomes dos arquivos extraídos da coluna selecionada
-                    expected_file_names = [f"{name}.xlsx" for name in df_selecionado[col_arquivo].dropna().unique().tolist()]
+                    expected_file_names = df_selecionado[col_arquivo].dropna().unique().tolist()
                     
-                    if all(file_name in expected_file_names for file_name in [name.split('.')[0] for name in file_names]):
+                    if all(file_name in expected_file_names for file_name in file_names):
                         st.success("Todos os anexos estão corretos.")
 
                         subject = st.text_input("Título do E-mail")
@@ -99,19 +101,20 @@ def enviar_emails():
                         if st.button("Enviar E-mails"):
                             for _, row in df_selecionado.iterrows():
                                 email = row[col_email]
-                                file_name = f"{row[col_arquivo]}.xlsx"  # Adiciona a extensão .xlsx ao nome do arquivo
+                                file_name = row[col_arquivo]
                                 cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
                                 
                                 if file_name in file_names:
                                     file = next(file for file in uploaded_files if file.name == file_name)
                                     send_email(email, file, subject, body, cc_emails_global + cc_emails_spec)
-                                    st.success(f"Email enviado para {email} com o anexo {file_name} e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
+                                    st.success(f"Email enviado para {email} com o anexo {file_name[-5]} e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
                     else:
                         st.warning("Alguns anexos não correspondem aos nomes escolhidos como (nomes dos arquivos). Verifique se os arquivos estão corretos.")
             else:
                 st.error("Por favor, selecione ao menos um e-mail para processar.")
         else:
             st.error("Por favor, selecione todas as colunas necessárias.")
+
 
 def send_email(to_email, attachment, subject, body, cc_emails):
     from_email = st.session_state["email"]
@@ -139,6 +142,7 @@ def send_email(to_email, attachment, subject, body, cc_emails):
         server.starttls()
         server.login(from_email, password)
         server.send_message(msg)
+
 
 # Verifica se há credenciais antes de chamar a função de envio de e-mails
 if usar_credenciais():
