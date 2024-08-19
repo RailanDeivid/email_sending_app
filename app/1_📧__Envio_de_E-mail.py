@@ -85,9 +85,14 @@ def enviar_emails():
                 uploaded_files = st.file_uploader("Escolha os arquivos anexos", type="xlsx", accept_multiple_files=True)
                 
                 if uploaded_files:
-                    file_names = [file.name for file in uploaded_files]
+                    # Extrai os nomes dos arquivos, removendo a extensão .xlsx
+                    file_names = [file.name.replace('.xlsx', '') for file in uploaded_files]
+                    
+                    # Converte a lista de nomes em uma string separada por vírgulas
+                    file_names_str = ', '.join(file_names)
+                    
                     st.write("Arquivos carregados:")
-                    st.write(file_names)
+                    st.write(file_names_str)
 
                     expected_file_names = df_selecionado[col_arquivo].dropna().unique().tolist()
                     
