@@ -87,7 +87,7 @@ def enviar_emails():
                 if uploaded_files:
                     file_names = [file.name for file in uploaded_files]
                     st.write("Arquivos carregados:")
-                    st.write(file_names)
+                    #st.write(file_names)
 
                     expected_file_names = df_selecionado[col_arquivo].dropna().unique().tolist()
                     
