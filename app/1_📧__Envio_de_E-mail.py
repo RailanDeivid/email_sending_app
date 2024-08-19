@@ -5,6 +5,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email import encoders
+from streamlit_option_menu import option_menu
+
 
 # Define o layout da página
 st.set_page_config(
@@ -13,6 +15,29 @@ st.set_page_config(
     initial_sidebar_state="expanded",
     layout="wide"
 )
+
+
+# Função para cadastrar o email do remetente
+def cadastrar_remetente():
+    st.title("Cadastro de Email do Remetente")
+    
+    # Formulário para o usuário inserir as credenciais
+    with st.form(key="form_remetente"):
+        email = st.text_input("Email")
+        senha = st.text_input("senha", type="password")
+        
+        # Botão para submeter o formulário
+        submit_button = st.form_submit_button(label="Cadastrar")
+        
+        if submit_button:
+            # Verifica se ambos os campos estão preenchidos
+            if not email or not senha:
+                st.warning("Email e senha são obrigatórios.")
+            else:
+                # Armazena as informações na sessão
+                st.session_state["email"] = email
+                st.session_state["senha"] = senha
+                st.success("Email cadastrado com sucesso!")
 
 
 
@@ -144,6 +169,24 @@ def send_email(to_email, attachment, subject, body, cc_emails):
         server.send_message(msg)
 
 
+# ------------------------------------------------------ Menu de navegação usando option_menu ------------------------ #
+cols1, cols2, cols3 = st.columns([1, 1.5, 1])
+with cols2:
+    selected_page = option_menu(
+        menu_title=None,
+        options=["Envio de E-mail", "Cadastro de Remetente"],
+        icons=["files", "file-earmark-break"],
+        menu_icon="cast",
+        default_index=0,
+        orientation="horizontal"
+    )
+
+# Lógica de seleção da página
+if selected_page == "Envio de E-mail":
+    if usar_credenciais():
+        enviar_emails()
+
+
+elif selected_page == "Cadastro de Remetente":
+        cadastrar_remetente()
 # Verifica se há credenciais antes de chamar a função de envio de e-mails
-if usar_credenciais():
-    enviar_emails()
