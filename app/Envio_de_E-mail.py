@@ -83,11 +83,12 @@ def enviar_emails():
         col1, col2, col3 = st.columns(3)
         with col1:
             usar_cc = st.checkbox("Deseja adicionar e-mails em Cópia (CC)?")
-
-        if usar_cc:
-            col_cc = st.selectbox("Selecione a coluna com os e-mails em Cópia", df.columns.tolist())
-        else:
-            col_cc = None
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if usar_cc:
+                col_cc = st.selectbox("Selecione a coluna com os e-mails em Cópia", df.columns.tolist())
+            else:
+                col_cc = None
         
         if col_email and col_arquivo:
             selecionar_todos = st.checkbox("Selecionar todos os e-mails", value=True)
