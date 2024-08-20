@@ -132,7 +132,7 @@ def enviar_emails():
                                 if file_name in file_names:
                                     file = next(file for file in uploaded_files if file.name == file_name)
                                     send_email(email, file, subject, body, cc_emails_global + cc_emails_spec)
-                                    st.success(f"Email enviado para {email} com o anexo {file_name[-5]} e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
+                                    st.success(f"Email enviado para {email} com o anexo {file_name[:-5]} e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
                     else:
                         st.warning("Alguns anexos não correspondem aos nomes escolhidos como (nomes dos arquivos). Verifique se os arquivos estão corretos.")
             else:
