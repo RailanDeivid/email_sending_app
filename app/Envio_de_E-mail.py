@@ -40,7 +40,7 @@ def cadastrar_remetente():
                 st.success("Email cadastrado com sucesso!")
 
 
-
+# Função para checar se um email foi cadastrado
 def usar_credenciais():
     email = st.session_state.get("email", None)
     senha = st.session_state.get("senha", None)
@@ -54,6 +54,7 @@ def usar_credenciais():
         return False
 
 
+# Função de configurações de email
 def enviar_emails():
     st.title("Envio de Emails em Massa")
 
@@ -141,6 +142,8 @@ def enviar_emails():
             st.error("Por favor, selecione todas as colunas necessárias.")
 
 
+
+# Função de ajustes de parâmetros para o envio do e-mail
 def send_email(to_email, attachment, subject, body, cc_emails):
     from_email = st.session_state["email"]
     password = st.session_state["senha"]
@@ -169,7 +172,7 @@ def send_email(to_email, attachment, subject, body, cc_emails):
         server.send_message(msg)
 
 
-# ------------------------------------------------------ Menu de navegação usando option_menu ------------------------ #
+# ------------------------------------------------------ Menu de navegação ------------------------ #
 cols1, cols2, cols3 = st.columns([1, 1.5, 1])
 with cols2:
     selected_page = option_menu(
@@ -181,12 +184,13 @@ with cols2:
         orientation="horizontal"
     )
 
+
 # Lógica de seleção da página
 if selected_page == "Envio de E-mail":
+    # Verifica se há credenciais antes de chamar a função de envio de e-mails
     if usar_credenciais():
         enviar_emails()
 
-
 elif selected_page == "Cadastro de Remetente":
         cadastrar_remetente()
-# Verifica se há credenciais antes de chamar a função de envio de e-mails
+
