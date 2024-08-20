@@ -8,6 +8,7 @@ from email import encoders
 from streamlit_option_menu import option_menu
 
 
+
 # Define o layout da página
 st.set_page_config(
     page_title="Envio de email",
@@ -24,7 +25,10 @@ def cadastrar_remetente():
     # Formulário para o usuário inserir as credenciais
     with st.form(key="form_remetente"):
         email = st.text_input("Email")
-        senha = st.text_input("senha", type="password")
+        senha = st.text_input("Senha", type="password")
+
+        # Checkbox para escolher o provedor de email
+        provedor = st.radio("Selecione o provedor de email", options=["Outlook", "Gmail"])
         
         # Botão para submeter o formulário
         submit_button = st.form_submit_button(label="Cadastrar")
@@ -37,17 +41,21 @@ def cadastrar_remetente():
                 # Armazena as informações na sessão
                 st.session_state["email"] = email
                 st.session_state["senha"] = senha
-                st.success("Email cadastrado com sucesso!")
+                st.session_state["provedor"] = provedor
+                st.success(f"Email cadastrado com sucesso como {provedor}!")
+
 
 
 # Função para checar se um email foi cadastrado
 def usar_credenciais():
     email = st.session_state.get("email", None)
     senha = st.session_state.get("senha", None)
+    provedor = st.session_state.get("provedor", None)
     
     if email and senha:
         st.success("Remetente cadastrado!")
         st.write(f"Email cadastrado: {email}")
+        st.write(f"Provedor: {provedor}")
         return True
     else:
         st.error("Nenhum email cadastrado. Por favor, cadastre o remetente na página de Cadastro de Remetente.")
@@ -147,10 +155,19 @@ def enviar_emails():
 def send_email(to_email, attachment, subject, body, cc_emails):
     from_email = st.session_state["email"]
     password = st.session_state["senha"]
-    
-    smtp_server = "smtp.office365.com"
-    smtp_port = 587
-    
+    provedor = st.session_state.get("provedor")
+
+    # Configurações do servidor SMTP de acordo com o provedor de email
+    if provedor == "Hotmail":
+        smtp_server = "smtp.office365.com"
+        smtp_port = 587
+    elif provedor == "Gmail":
+        smtp_server = "smtp.gmail.com"
+        smtp_port = 587
+    else:
+        st.error("Provedor de email desconhecido.")
+        return
+
     msg = MIMEMultipart()
     msg['From'] = from_email
     msg['To'] = to_email
@@ -166,10 +183,14 @@ def send_email(to_email, attachment, subject, body, cc_emails):
     part.add_header('Content-Disposition', f'attachment; filename= {attachment.name}')
     msg.attach(part)
     
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.starttls()
-        server.login(from_email, password)
-        server.send_message(msg)
+    try:
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(from_email, password)
+            server.send_message(msg)
+        st.success(f"Email enviado com sucesso para {to_email}.")
+    except Exception as e:
+        st.error(f"Falha ao enviar o email: {str(e)}")
 
 
 # ------------------------------------------------------ Menu de navegação ------------------------ #
