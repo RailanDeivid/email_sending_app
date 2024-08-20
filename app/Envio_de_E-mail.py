@@ -121,7 +121,7 @@ def enviar_emails():
 
                         subject = st.text_input("Título do E-mail")
                         body = st.text_area("Corpo do E-mail")
-                        cc_emails_global = st.text_input("CC Global (Separados por vírgula)", "").split(',')
+                        cc_emails_global = st.text_input("CC Global -> Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
 
                         if st.button("Enviar E-mails"):
                             for _, row in df_selecionado.iterrows():
