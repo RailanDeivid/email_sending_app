@@ -92,16 +92,16 @@ def enviar_emails():
                 col_cc = None
         
         if col_email and col_arquivo:
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                selecionar_todos = st.checkbox("Selecionar todos os e-mails", value=True)
+            selecionar_todos = st.checkbox("Selecionar todos os e-mails", value=True)
 
             if selecionar_todos:
                 selected_emails = df[col_email].dropna().unique().tolist()
                 st.write("Todos os e-mails serão processados.")
             else:
                 unique_emails = df[col_email].dropna().unique().tolist()
-                selected_emails = st.multiselect("Selecione os e-mails que deseja processar", options=unique_emails)
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    selected_emails = st.multiselect("Selecione os e-mails que deseja processar", options=unique_emails)
             
             if selected_emails:
                 df_selecionado = df[df[col_email].isin(selected_emails)]
