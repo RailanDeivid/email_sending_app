@@ -28,7 +28,7 @@ def cadastrar_remetente():
         senha = st.text_input("Senha", type="password")
 
         # Checkbox para escolher o provedor de email
-        provedor = st.radio("Selecione o provedor de email", options=["Outlook", "Gmail"])
+        provedor = st.radio("Selecione o provedor de email", options=["Outlook/Hotmail", "Gmail"])
         
         # Botão para submeter o formulário
         submit_button = st.form_submit_button(label="Cadastrar")
@@ -158,7 +158,7 @@ def send_email(to_email, attachment, subject, body, cc_emails):
     provedor = st.session_state.get("provedor")
 
     # Configurações do servidor SMTP de acordo com o provedor de email
-    if provedor == "Hotmail":
+    if provedor == "Outlook/Hotmail":
         smtp_server = "smtp.office365.com"
         smtp_port = 587
     elif provedor == "Gmail":
