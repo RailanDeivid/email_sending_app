@@ -190,7 +190,7 @@ def send_email(to_email, attachment, subject, body, cc_emails):
             server.send_message(msg)
         st.success(f"Email enviado com sucesso para {to_email}.")
     except Exception as e:
-        st.error(f"""Falha ao enviar o email: {str(e)}
+        st.error(f"""Falha ao enviar o email: {str(e)}\n
                  VERIFIQUE SE O PROVEDOR SELECIONADO È O CORRETO!!""")
 
 
