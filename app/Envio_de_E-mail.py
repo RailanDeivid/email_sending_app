@@ -178,7 +178,7 @@ with cols2:
     selected_page = option_menu(
         menu_title=None,
         options=["Envio de E-mail", "Cadastro de Remetente"],
-        icons=["files", "file-earmark-break"],
+        icons=["email", "file-earmark-break"],
         menu_icon="cast",
         default_index=0,
         orientation="horizontal"
