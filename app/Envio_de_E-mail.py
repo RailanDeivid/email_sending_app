@@ -90,9 +90,10 @@ def enviar_emails():
                 col_cc = st.selectbox("Selecione a coluna com os e-mails em Cópia", df.columns.tolist())
             else:
                 col_cc = None
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            if col_email and col_arquivo:
+        
+        if col_email and col_arquivo:
+            col1, col2, col3 = st.columns(3)
+            with col1:
                 selecionar_todos = st.checkbox("Selecionar todos os e-mails", value=True)
 
             if selecionar_todos:
