@@ -73,14 +73,16 @@ def enviar_emails():
         st.write("Arquivo carregado com sucesso!")
         st.write(df.head())
         
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         with col1:
             col_email = st.selectbox("Selecione a coluna com os e-mails", df.columns.tolist())
         with col2:
             col_arquivo = st.selectbox("Selecione a coluna com os nomes dos arquivos", df.columns.tolist())
         
         # Checkbox para usar a coluna de CC
-        usar_cc = st.checkbox("Deseja adicionar e-mails em Cópia (CC)?")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            usar_cc = st.checkbox("Deseja adicionar e-mails em Cópia (CC)?")
 
         if usar_cc:
             col_cc = st.selectbox("Selecione a coluna com os e-mails em Cópia", df.columns.tolist())
