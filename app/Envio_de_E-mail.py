@@ -168,7 +168,7 @@ def send_email(to_email, attachment, subject, body, cc_emails):
         st.error("Provedor de email desconhecido.")
         return
 
-    msg = MIMEMultipart()
+    msg = MIMEMultipart('html')
     msg['From'] = from_email
     msg['To'] = to_email
     msg['Subject'] = subject
