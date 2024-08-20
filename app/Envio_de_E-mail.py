@@ -95,64 +95,64 @@ def enviar_emails():
             if col_email and col_arquivo:
                 selecionar_todos = st.checkbox("Selecionar todos os e-mails", value=True)
 
-                if selecionar_todos:
-                    selected_emails = df[col_email].dropna().unique().tolist()
-                    st.write("Todos os e-mails serão processados.")
-                else:
-                    unique_emails = df[col_email].dropna().unique().tolist()
-                    selected_emails = st.multiselect("Selecione os e-mails que deseja processar", options=unique_emails)
-                
-                if selected_emails:
-                    df_selecionado = df[df[col_email].isin(selected_emails)]
-                    
-                    # Monta a mensagem de sucesso com as configurações definidas
-                    configuracoes = f"""
-                        \nColuna de e-mails: {col_email}
-                        \nColuna de arquivos: {col_arquivo}
-                        \nE-mails selecionados: {", ".join(selected_emails)}
-                    """
-                    
-                    # Se a coluna de CC foi selecionada, adicionar ao resumo
-                    if col_cc:
-                        configuracoes += f"\nColuna de CC: {col_cc}"
-                    
-                    st.header('Configurações definidas:')
-                    st.success(configuracoes)
-                    
-                    st.warning("Agora, faça o upload dos arquivos anexos. Certifique-se de que os arquivos tenham os mesmos nomes listados na coluna selecionada.")
-                    
-                    uploaded_files = st.file_uploader("Escolha os arquivos anexos", type="xlsx", accept_multiple_files=True)
-                    
-                    if uploaded_files:
-                        file_names = [file.name for file in uploaded_files]
-                        st.write("Arquivos carregados:")
-                        #st.write(file_names)
-
-                        expected_file_names = df_selecionado[col_arquivo].dropna().unique().tolist()
-                        
-                        if all(file_name in expected_file_names for file_name in file_names):
-                            st.success("Todos os anexos estão corretos.")
-
-                            subject = st.text_input("Título do E-mail")
-                            body = st.text_area("Corpo do E-mail")
-                            cc_emails_global = st.text_input("CC Global: Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
-
-                            if st.button("Enviar E-mails"):
-                                for _, row in df_selecionado.iterrows():
-                                    email = row[col_email]
-                                    file_name = row[col_arquivo]
-                                    cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
-                                    
-                                    if file_name in file_names:
-                                        file = next(file for file in uploaded_files if file.name == file_name)
-                                        send_email(email, file, subject, body, cc_emails_global + cc_emails_spec)
-                                        st.success(f"Email enviado para {email} com o anexo {file_name[:-5]} e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
-                        else:
-                            st.warning("Alguns anexos não correspondem aos nomes escolhidos como (nomes dos arquivos). Verifique se os arquivos estão corretos.")
-                else:
-                    st.error("Por favor, selecione ao menos um e-mail para processar.")
+            if selecionar_todos:
+                selected_emails = df[col_email].dropna().unique().tolist()
+                st.write("Todos os e-mails serão processados.")
             else:
-                st.error("Por favor, selecione todas as colunas necessárias.")
+                unique_emails = df[col_email].dropna().unique().tolist()
+                selected_emails = st.multiselect("Selecione os e-mails que deseja processar", options=unique_emails)
+            
+            if selected_emails:
+                df_selecionado = df[df[col_email].isin(selected_emails)]
+                
+                # Monta a mensagem de sucesso com as configurações definidas
+                configuracoes = f"""
+                    \nColuna de e-mails: {col_email}
+                    \nColuna de arquivos: {col_arquivo}
+                    \nE-mails selecionados: {", ".join(selected_emails)}
+                """
+                
+                # Se a coluna de CC foi selecionada, adicionar ao resumo
+                if col_cc:
+                    configuracoes += f"\nColuna de CC: {col_cc}"
+                
+                st.header('Configurações definidas:')
+                st.success(configuracoes)
+                
+                st.warning("Agora, faça o upload dos arquivos anexos. Certifique-se de que os arquivos tenham os mesmos nomes listados na coluna selecionada.")
+                
+                uploaded_files = st.file_uploader("Escolha os arquivos anexos", type="xlsx", accept_multiple_files=True)
+                
+                if uploaded_files:
+                    file_names = [file.name for file in uploaded_files]
+                    st.write("Arquivos carregados:")
+                    #st.write(file_names)
+
+                    expected_file_names = df_selecionado[col_arquivo].dropna().unique().tolist()
+                    
+                    if all(file_name in expected_file_names for file_name in file_names):
+                        st.success("Todos os anexos estão corretos.")
+
+                        subject = st.text_input("Título do E-mail")
+                        body = st.text_area("Corpo do E-mail")
+                        cc_emails_global = st.text_input("CC Global: Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
+
+                        if st.button("Enviar E-mails"):
+                            for _, row in df_selecionado.iterrows():
+                                email = row[col_email]
+                                file_name = row[col_arquivo]
+                                cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
+                                
+                                if file_name in file_names:
+                                    file = next(file for file in uploaded_files if file.name == file_name)
+                                    send_email(email, file, subject, body, cc_emails_global + cc_emails_spec)
+                                    st.success(f"Email enviado para {email} com o anexo {file_name[:-5]} e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
+                    else:
+                        st.warning("Alguns anexos não correspondem aos nomes escolhidos como (nomes dos arquivos). Verifique se os arquivos estão corretos.")
+            else:
+                st.error("Por favor, selecione ao menos um e-mail para processar.")
+        else:
+            st.error("Por favor, selecione todas as colunas necessárias.")
 
 
 
