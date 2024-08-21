@@ -76,22 +76,28 @@ def enviar_emails():
         col1, col2, col3 = st.columns(3)
         with col1:
             col_email = st.selectbox("Selecione a coluna com os e-mails", df.columns.tolist())
-        with col2:
-            col_arquivo = st.selectbox("Selecione a coluna com os nomes dos arquivos", df.columns.tolist())
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            enviar_anexos = st.checkbox("Deseja enviar anexos?", value=True)
+        col1, col2, col3 = st.columns(3)
+        if enviar_anexos:
+            with col1:
+                col_arquivo = st.selectbox("Selecione a coluna com os nomes dos arquivos", df.columns.tolist())
+        else:
+            col_arquivo = None
         
         # Checkbox para usar a coluna de CC
         col1, col2, col3 = st.columns(3)
         with col1:
             usar_cc = st.checkbox("Deseja adicionar e-mails em Cópia (CC)?")
-            
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            if usar_cc:
+        col1, col2, col3 = st.columns(3)    
+        if usar_cc:
+            with col1:
                 col_cc = st.selectbox("Selecione a coluna com os e-mails em Cópia", df.columns.tolist())
-            else:
-                col_cc = None
+        else:
+            col_cc = None
         
-        if col_email and col_arquivo:
+        if col_email and (not enviar_anexos or col_arquivo):
             selecionar_todos = st.checkbox("Selecionar todos os e-mails", value=True)
 
             if selecionar_todos:
@@ -109,9 +115,10 @@ def enviar_emails():
                 # Monta a mensagem de sucesso com as configurações definidas
                 configuracoes = f"""
                     \nColuna de e-mails: {col_email}
-                    \nColuna de arquivos: {col_arquivo}
-                    \nE-mails selecionados: {", ".join(selected_emails)}
                 """
+                
+                if enviar_anexos:
+                    configuracoes += f"\nColuna de arquivos: {col_arquivo}"
                 
                 # Se a coluna de CC foi selecionada, adicionar ao resumo
                 if col_cc:
@@ -120,40 +127,56 @@ def enviar_emails():
                 st.header('Configurações definidas:')
                 st.success(configuracoes)
                 
-                st.warning("Agora, faça o upload dos arquivos anexos. Certifique-se de que os arquivos tenham os mesmos nomes listados na coluna selecionada.")
-                
-                uploaded_files = st.file_uploader("Escolha os arquivos anexos", type="xlsx", accept_multiple_files=True)
-                
-                if uploaded_files:
-                    file_names = [file.name for file in uploaded_files]
-                    st.write("Arquivos carregados:")
-                    #st.write(file_names)
-
-                    expected_file_names = df_selecionado[col_arquivo].dropna().unique().tolist()
+                if enviar_anexos:
+                    st.warning("Agora, faça o upload dos arquivos anexos. Certifique-se de que os arquivos tenham os mesmos nomes listados na coluna selecionada.")
                     
-                    if all(file_name in expected_file_names for file_name in file_names):
-                        st.success("Todos os anexos estão corretos.")
+                    uploaded_files = st.file_uploader("Escolha os arquivos anexos", type="xlsx", accept_multiple_files=True)
+                    
+                    if uploaded_files:
+                        file_names = [file.name for file in uploaded_files]
+                        st.write("Arquivos carregados:")
+                        #st.write(file_names)
 
-                        subject = st.text_input("Título do E-mail")
-                        body = st.text_area("Corpo do E-mail")
-                        cc_emails_global = st.text_input("CC Global: Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
+                        expected_file_names = df_selecionado[col_arquivo].dropna().unique().tolist()
+                        
+                        if all(file_name in expected_file_names for file_name in file_names):
+                            st.success("Todos os anexos estão corretos.")
 
-                        if st.button("Enviar E-mails"):
-                            for _, row in df_selecionado.iterrows():
-                                email = row[col_email]
-                                file_name = row[col_arquivo]
-                                cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
-                                
-                                if file_name in file_names:
-                                    file = next(file for file in uploaded_files if file.name == file_name)
-                                    send_email(email, file, subject, body, cc_emails_global + cc_emails_spec)
-                                    st.success(f"Email enviado para {email} com o anexo {file_name[:-5]} e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
-                    else:
-                        st.warning("Alguns anexos não correspondem aos nomes escolhidos como (nomes dos arquivos). Verifique se os arquivos estão corretos.")
+                            subject = st.text_input("Título do E-mail")
+                            body = st.text_area("Corpo do E-mail")
+                            cc_emails_global = st.text_input("CC Global: Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
+
+                            if st.button("Enviar E-mails"):
+                                for _, row in df_selecionado.iterrows():
+                                    email = row[col_email]
+                                    file_name = row[col_arquivo] if enviar_anexos else None
+                                    cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
+                                    
+                                    if enviar_anexos and file_name in file_names:
+                                        file = next(file for file in uploaded_files if file.name == file_name)
+                                        send_email(email, file, subject, body, cc_emails_global + cc_emails_spec)
+                                        st.success(f"Email enviado para {email} com o anexo {file_name[:-5]} e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
+                                    elif not enviar_anexos:
+                                        send_email(email, None, subject, body, cc_emails_global + cc_emails_spec)
+                                        st.success(f"Email enviado para {email} sem anexo e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
+                        else:
+                            st.warning("Alguns anexos não correspondem aos nomes escolhidos como (nomes dos arquivos). Verifique se os arquivos estão corretos.")
+                else:
+                    subject = st.text_input("Título do E-mail")
+                    body = st.text_area("Corpo do E-mail")
+                    cc_emails_global = st.text_input("CC Global: Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
+
+                    if st.button("Enviar E-mails"):
+                        for _, row in df_selecionado.iterrows():
+                            email = row[col_email]
+                            cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
+                            send_email(email, None, subject, body, cc_emails_global + cc_emails_spec)
+                            st.success(f"Email enviado para {email} sem anexo e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
             else:
                 st.error("Por favor, selecione ao menos um e-mail para processar.")
         else:
             st.error("Por favor, selecione todas as colunas necessárias.")
+
 
 
 
@@ -183,11 +206,17 @@ def send_email(to_email, attachment, subject, body, cc_emails):
     
     msg.attach(MIMEText(body, 'plain'))
     
-    part = MIMEBase('application', 'octet-stream')
-    part.set_payload(attachment.read())
-    encoders.encode_base64(part)
-    part.add_header('Content-Disposition', f'attachment; filename= {attachment.name}')
-    msg.attach(part)
+    # Se houver um anexo, adiciona-o ao email
+    if attachment is not None:
+        try:
+            part = MIMEBase('application', 'octet-stream')
+            part.set_payload(attachment.read())
+            encoders.encode_base64(part)
+            part.add_header('Content-Disposition', f'attachment; filename= {attachment.name}')
+            msg.attach(part)
+        except Exception as e:
+            st.error(f"Erro ao anexar arquivo: {str(e)}")
+            return
     
     try:
         with smtplib.SMTP(smtp_server, smtp_port) as server:
@@ -197,7 +226,7 @@ def send_email(to_email, attachment, subject, body, cc_emails):
         # st.success(f"Email enviado com sucesso para {to_email}.")
     except Exception as e:
         st.error(f"""Falha ao enviar o email: {str(e)}\n
-                 VERIFIQUE SE O PROVEDOR SELECIONADO È O CORRETO!!""")
+                 VERIFIQUE SE O PROVEDOR SELECIONADO É O CORRETO!!""")
 
 
 # ------------------------------------------------------ Menu de navegação ------------------------ #
