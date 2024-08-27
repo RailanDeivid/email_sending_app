@@ -206,7 +206,7 @@ def send_email(to_email, attachment, subject, body, cc_emails):
     if cc_emails:
         msg['Cc'] = ', '.join(cc_emails)
     
-    msg.attach(MIMEText(body, 'html'))
+    msg.attach(MIMEText(body, 'plain'))
     
     # Se houver um anexo, adiciona-o ao email
     if attachment is not None:
