@@ -253,7 +253,6 @@ def send_email(to_email, attachment, subject, body, cc_emails):
             server.starttls()
             server.login(from_email, password)
             server.send_message(msg)
-            st.success(f"Emails enviado com sucesso!!")
         # st.success(f"Email enviado com sucesso para {to_email}.")
     except Exception as e:
         st.error(f"""Falha ao enviar o email: {str(e)}\n
