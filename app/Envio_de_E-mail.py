@@ -118,11 +118,11 @@ def enviar_emails():
                 """
                 
                 if enviar_anexos:
-                    configuracoes += f"\nColuna de arquivos: {col_arquivo}"
+                    configuracoes += f"""\nColuna de arquivos: {col_arquivo}"""
                 
                 # Se a coluna de CC foi selecionada, adicionar ao resumo
                 if col_cc:
-                    configuracoes += f"\nColuna de CC: {col_cc}"
+                    configuracoes += f"""\nColuna de CC: {col_cc}"""
                 
                 st.header('Configurações definidas:')
                 st.success(configuracoes)
