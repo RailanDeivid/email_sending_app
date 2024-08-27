@@ -144,7 +144,7 @@ def enviar_emails():
                             st.success("Todos os anexos estão corretos.")
                             subject = st.text_input("Título do E-mail")
                             col1, col2, col3 = st.columns(3)
-                            incluir_saudacao = col1.checkbox("Deseja incluir uma saudação?", value=True)  # Checkbox para incluir saudação
+                            incluir_saudacao = col1.checkbox("Deseja incluir uma saudação?", value=False)  # Checkbox para incluir saudação
                             
                             # Definindo a coluna de nome apenas se a saudação for incluída
                             if incluir_saudacao:
@@ -253,6 +253,7 @@ def send_email(to_email, attachment, subject, body, cc_emails):
             server.starttls()
             server.login(from_email, password)
             server.send_message(msg)
+            st.success(f"Emails enviado com sucesso!!")
         # st.success(f"Email enviado com sucesso para {to_email}.")
     except Exception as e:
         st.error(f"""Falha ao enviar o email: {str(e)}\n
