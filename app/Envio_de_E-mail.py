@@ -81,7 +81,7 @@ def enviar_emails():
         
         df = pd.read_excel(uploaded_file, sheet_name=sheet_name)
         st.write("Arquivo carregado com sucesso!")
-        st.write(df.head())
+        st.write(df)
         
         col1, col2, col3, col4 = st.columns(4)
         with col1:
