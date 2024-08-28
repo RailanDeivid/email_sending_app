@@ -112,7 +112,7 @@ def enviar_emails():
         with col1:
             incluir_saudacao = st.checkbox("Deseja incluir uma saudação?", value=False)
             if incluir_saudacao:
-                col_nome = st.selectbox("Selecione a coluna com os nomes", df.columns.tolist())
+                col_nome = st.selectbox("Selecione a coluna com os nomes da pessoas", df.columns.tolist())
             else:
                 col_nome = None
         
