@@ -189,6 +189,7 @@ def enviar_emails():
                             cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
                             send_email(email, None, subject, corpo_email, cc_emails_global + cc_emails_spec)
                             st.success(f"Email enviado para {email} sem anexo e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
+                        st.info(f"Todos os E-mails foram enviados com sucesso!!")
             else:
                 st.error("Por favor, selecione ao menos um e-mail para processar.")
         else:
