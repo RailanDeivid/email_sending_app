@@ -160,7 +160,6 @@ def enviar_emails():
                             if st.button("Enviar E-mails"):
                                 total_emails = len(df_selecionado)
                                 emails_enviados = 0
-                                
                                 for _, row in df_selecionado.iterrows():
                                     email = row[col_email]
                                     nome = row.get(col_nome, "") if col_nome else ""
@@ -176,11 +175,12 @@ def enviar_emails():
                                     elif not enviar_anexos:
                                         send_email(email, None, subject, corpo_email, cc_emails_global + cc_emails_spec)
                                         st.success(f"Email enviado para {email} sem anexo e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
-                                    
+                                        
                                     emails_enviados += 1
-                                
+                                    
                                 if emails_enviados == total_emails:
                                     st.warning("Todos os e-mails foram enviados com sucesso!")
+                        
                         else:
                             st.warning("Alguns anexos não correspondem aos nomes escolhidos como (nomes dos arquivos). Verifique se os arquivos estão corretos.")
                 else:
@@ -189,9 +189,6 @@ def enviar_emails():
                     cc_emails_global = st.text_input("CC Global: Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
 
                     if st.button("Enviar E-mails"):
-                        total_emails = len(df_selecionado)
-                        emails_enviados = 0
-                        
                         for _, row in df_selecionado.iterrows():
                             email = row[col_email]
                             nome = row.get(col_nome, "") if col_nome else ""
@@ -200,16 +197,12 @@ def enviar_emails():
                             cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
                             send_email(email, None, subject, corpo_email, cc_emails_global + cc_emails_spec)
                             st.success(f"Email enviado para {email} sem anexo e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
-                            
-                            emails_enviados += 1
+                    
                         
-                        if emails_enviados == total_emails:
-                            st.warning("Todos os e-mails foram enviados com sucesso.")
             else:
                 st.error("Por favor, selecione ao menos um e-mail para processar.")
         else:
             st.error("Por favor, selecione todas as colunas necessárias.")
-
 
 # Função para obter a saudação com base na hora do dia e nome do destinatário
 def obter_saudacao(nome):
