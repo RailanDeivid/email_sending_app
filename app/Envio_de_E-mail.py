@@ -108,6 +108,8 @@ def enviar_emails():
         else:
             col_cc = None
         
+        col_nome = None  # Inicialização para garantir que col_nome exista
+
         if col_email and (not enviar_anexos or col_arquivo):
             selecionar_todos = st.checkbox("Selecionar todos os e-mails", value=True)
 
@@ -152,8 +154,6 @@ def enviar_emails():
                             
                             if incluir_saudacao:
                                 col_nome = col1.selectbox("Selecione a coluna com os nomes", df.columns.tolist())
-                            else:
-                                col_nome = None
                             
                             body = st.text_area("Corpo do E-mail")
                             cc_emails_global = st.text_input("CC Global: Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
@@ -162,7 +162,7 @@ def enviar_emails():
                                 for _, row in df_selecionado.iterrows():
                                     email = row[col_email]
                                     nome = row[col_nome] if col_nome and col_nome in df.columns else ""
-                                    saudacao = obter_saudacao(nome) if incluir_saudacao else ""
+                                    saudacao = obter_saudacao(nome) if incluir_saudacao and col_nome else ""
                                     corpo_email = f"{saudacao}{body}"
                                     file_name = row[col_arquivo] if enviar_anexos else None
                                     cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
@@ -185,7 +185,7 @@ def enviar_emails():
                         for _, row in df_selecionado.iterrows():
                             email = row[col_email]
                             nome = row[col_nome] if col_nome and col_nome in df.columns else ""
-                            saudacao = obter_saudacao(nome) if incluir_saudacao else ""
+                            saudacao = obter_saudacao(nome) if incluir_saudacao and col_nome else ""
                             corpo_email = f"{saudacao}{body}"
                             cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
                             send_email(email, None, subject, corpo_email, cc_emails_global + cc_emails_spec)
