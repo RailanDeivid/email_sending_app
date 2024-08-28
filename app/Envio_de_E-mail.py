@@ -69,7 +69,15 @@ def enviar_emails():
     uploaded_file = st.file_uploader("Escolha um arquivo Excel contendo os e-mails e nomes dos anexos", type="xlsx")
     
     if uploaded_file is not None:
-        df = pd.read_excel(uploaded_file)
+        xls = pd.ExcelFile(uploaded_file)
+        sheets = xls.sheet_names
+        
+        if len(sheets) > 1:
+            sheet_name = st.selectbox("Selecione a aba do Excel que deseja usar", sheets)
+        else:
+            sheet_name = sheets[0]
+        
+        df = pd.read_excel(uploaded_file, sheet_name=sheet_name)
         st.write("Arquivo carregado com sucesso!")
         st.write(df.head())
         
@@ -96,7 +104,6 @@ def enviar_emails():
                 col_cc = st.selectbox("Selecione a coluna com os e-mails em Cópia", df.columns.tolist())
         else:
             col_cc = None
-        
 
         
         if col_email and (not enviar_anexos or col_arquivo):
