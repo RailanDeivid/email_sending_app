@@ -89,7 +89,7 @@ def enviar_emails():
         
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            enviar_anexos = st.checkbox("Deseja enviar anexos?", value=True)
+            enviar_anexos = st.checkbox("Deseja enviar anexos?", value=False)
         col1, col2, col3, col4 = st.columns(4)
         if enviar_anexos:
             with col1:
