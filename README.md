@@ -22,4 +22,5 @@ Este aplicativo foi criado para resolver o problema de envio de e-mails em massa
 
 Link app: [Web App Envio de e-mails em massa](https://email-sending.streamlit.app/)
 
-![image](https://github.com/user-attachments/assets/bf04f19f-e097-42c9-a2b1-3c696def7199)
+![image](https://github.com/user-attachments/assets/5d557e98-83cd-4ea1-9ec2-cdfd6b3cca9b)
+
