@@ -161,7 +161,7 @@ def enviar_emails():
                             if st.button("Enviar E-mails"):
                                 for _, row in df_selecionado.iterrows():
                                     email = row[col_email]
-                                    nome = row.get(col_nome, "") if col_nome else ""
+                                    nome = row[col_nome] if col_nome and col_nome in df.columns else ""
                                     saudacao = obter_saudacao(nome) if incluir_saudacao else ""
                                     corpo_email = f"{saudacao}{body}"
                                     file_name = row[col_arquivo] if enviar_anexos else None
@@ -184,7 +184,7 @@ def enviar_emails():
                     if st.button("Enviar E-mails"):
                         for _, row in df_selecionado.iterrows():
                             email = row[col_email]
-                            nome = row.get(col_nome, "") if col_nome else ""
+                            nome = row[col_nome] if col_nome and col_nome in df.columns else ""
                             saudacao = obter_saudacao(nome) if incluir_saudacao else ""
                             corpo_email = f"{saudacao}{body}"
                             cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
@@ -194,6 +194,7 @@ def enviar_emails():
                 st.error("Por favor, selecione ao menos um e-mail para processar.")
         else:
             st.error("Por favor, selecione todas as colunas necessárias.")
+
 
 # Função para obter a saudação com base na hora do dia e nome do destinatário
 def obter_saudacao(nome):
