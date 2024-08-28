@@ -136,7 +136,7 @@ def enviar_emails():
                 if enviar_anexos:
                     st.warning("Agora, faça o upload dos arquivos anexos. Certifique-se de que os arquivos tenham os mesmos nomes listados na coluna selecionada.")
                     
-                    uploaded_files = st.file_uploader("Escolha os arquivos anexos", type="xlsx", accept_multiple_files=True)
+                    uploaded_files = st.file_uploader("Escolha os arquivos anexos", type="xlsx", accept_multiple_files=False)
                     
                     if uploaded_files:
                         file_names = [file.name for file in uploaded_files]
