@@ -61,7 +61,6 @@ def usar_credenciais():
         st.error("Nenhum email cadastrado. Por favor, cadastre o remetente na página de Cadastro de Remetente.")
         return False
 
-
 # Função de envio de emails
 def enviar_emails():
     st.title("Envio de Emails em Massa")
@@ -76,6 +75,7 @@ def enviar_emails():
             col1, col2, col3, col4 = st.columns(4)
             with col1:
                 sheet_name = st.selectbox("Selecione a aba do Excel que deseja usar", sheets)
+                st.session_state["sheet_name_idx"] = sheets.index(sheet_name)
         else:
             sheet_name = sheets[0]
         
