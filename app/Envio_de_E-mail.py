@@ -108,8 +108,14 @@ def enviar_emails():
         else:
             col_cc = None
         
-        col_nome = None  # Inicialização para garantir que col_nome exista
-
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            incluir_saudacao = st.checkbox("Deseja incluir uma saudação?", value=False)
+            if incluir_saudacao:
+                col_nome = st.selectbox("Selecione a coluna com os nomes", df.columns.tolist())
+            else:
+                col_nome = None
+        
         if col_email and (not enviar_anexos or col_arquivo):
             selecionar_todos = st.checkbox("Selecionar todos os e-mails", value=True)
 
@@ -149,12 +155,6 @@ def enviar_emails():
                         if all(file_name in expected_file_names for file_name in file_names):
                             st.success("Todos os anexos estão corretos.")
                             subject = st.text_input("Título do E-mail")
-                            col1, col2, col3, col4 = st.columns(4)
-                            incluir_saudacao = col1.checkbox("Deseja incluir uma saudação?", value=False)
-                            
-                            if incluir_saudacao:
-                                col_nome = col1.selectbox("Selecione a coluna com os nomes", df.columns.tolist())
-                            
                             body = st.text_area("Corpo do E-mail")
                             cc_emails_global = st.text_input("CC Global: Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
 
