@@ -62,7 +62,7 @@ def usar_credenciais():
         return False
 
 
-# Função de configurações de email
+# Função de envio de emails
 def enviar_emails():
     st.title("Envio de Emails em Massa")
 
@@ -106,7 +106,6 @@ def enviar_emails():
                 col_cc = st.selectbox("Selecione a coluna com os e-mails em Cópia", df.columns.tolist())
         else:
             col_cc = None
-
         
         if col_email and (not enviar_anexos or col_arquivo):
             selecionar_todos = st.checkbox("Selecionar todos os e-mails", value=True)
@@ -123,18 +122,13 @@ def enviar_emails():
             if selected_emails:
                 df_selecionado = df[df[col_email].isin(selected_emails)]
                 
-                # Monta a mensagem de sucesso com as configurações definidas
-                configuracoes = f"""
-                    \nColuna de e-mails: {col_email}
-                """
+                configuracoes = f"\nColuna de e-mails: {col_email}"
                 
                 if enviar_anexos:
-                    configuracoes += f"""\nColuna de arquivos: {col_arquivo}
-                    """
+                    configuracoes += f"\nColuna de arquivos: {col_arquivo}"
                 
                 if col_cc:
-                    configuracoes += f"""\nColuna de CC: {col_cc}
-                    """
+                    configuracoes += f"\nColuna de CC: {col_cc}"
                 
                 st.header('Configurações definidas:')
                 st.success(configuracoes)
@@ -153,9 +147,8 @@ def enviar_emails():
                             st.success("Todos os anexos estão corretos.")
                             subject = st.text_input("Título do E-mail")
                             col1, col2, col3, col4 = st.columns(4)
-                            incluir_saudacao = col1.checkbox("Deseja incluir uma saudação?", value=False)  # Checkbox para incluir saudação
+                            incluir_saudacao = col1.checkbox("Deseja incluir uma saudação?", value=False)
                             
-                            # Definindo a coluna de nome apenas se a saudação for incluída
                             if incluir_saudacao:
                                 col_nome = col1.selectbox("Selecione a coluna com os nomes", df.columns.tolist())
                             else:
@@ -167,7 +160,7 @@ def enviar_emails():
                             if st.button("Enviar E-mails"):
                                 for _, row in df_selecionado.iterrows():
                                     email = row[col_email]
-                                    nome = row.get(col_nome, "") if col_nome else ""  # Verifica se col_nome não é None e pega o valor
+                                    nome = row.get(col_nome, "") if col_nome else ""
                                     saudacao = obter_saudacao(nome) if incluir_saudacao else ""
                                     corpo_email = f"{saudacao}{body}"
                                     file_name = row[col_arquivo] if enviar_anexos else None
@@ -190,7 +183,7 @@ def enviar_emails():
                     if st.button("Enviar E-mails"):
                         for _, row in df_selecionado.iterrows():
                             email = row[col_email]
-                            nome = row[col_nome]  # Obter o nome do destinatário
+                            nome = row.get(col_nome, "") if col_nome else ""
                             saudacao = obter_saudacao(nome) if incluir_saudacao else ""
                             corpo_email = f"{saudacao}{body}"
                             cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
