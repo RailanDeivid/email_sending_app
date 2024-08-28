@@ -201,6 +201,14 @@ def enviar_emails():
                             emails_enviados += 1
                         if emails_enviados == total_emails:
                             st.warning("Todos os e-mails foram enviados com sucesso!")
+                            st.markdown(
+                                    """
+                                    <div style="text-align: center;">
+                                        <p style="color: orange; font-weight: bold;">Todos os e-mails foram enviados com sucesso!</p>
+                                    </div>
+                                    """,
+                                    unsafe_allow_html=True
+                                )
             else:
                 st.error("Por favor, selecione ao menos um e-mail para processar.")
         else:
