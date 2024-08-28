@@ -8,7 +8,7 @@
 
 Este aplicativo foi criado para resolver o problema de envio de e-mails em massa de forma eficiente e automatizada. Desenvolvido com Python e Streamlit, o app oferece uma interface amigável que permite aos usuários enviar e-mails personalizados para uma lista de destinatários com apenas alguns cliques.
 
-## Descrição
+## Funcionalidades
 
 * **Registro de E-mail Remetente:** Permite ao usuário cadastrar seu e-mail e credenciais para envio **(O e-mail e senha colocados não são salvo em nenhum lugar, é totalmente seguro. Ficam salvo apenas em cash para realizar os disparos. basta um F5 na pagina e já são apagados)**.
 * **Upload de Arquivo Excel:** O usuário pode carregar um arquivo Excel contendo os e-mails dos destinatários e outros dados necessários.
