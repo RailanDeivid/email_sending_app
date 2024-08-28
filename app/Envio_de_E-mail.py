@@ -21,7 +21,7 @@ st.set_page_config(
 # Função para cadastrar o email do remetente
 def cadastrar_remetente():
     st.title("Cadastro de Email do Remetente")
-    st.warning("O e-mail e senha colocados não são salvo em nenhum lugar, é totalmente seguro. Ficam salvo apenas em cash para realizar os disparos. basta um F5 na pagina e já são apagados")
+    st.error("O e-mail e senha colocados não são salvo em nenhum lugar. É totalmente seguro. Ficam salvo apenas em cash para realizar os disparos. basta um F5 na pagina e já são apagados")
     # Formulário para o usuário inserir as credenciais
     with st.form(key="form_remetente"):
         email = st.text_input("Email")
