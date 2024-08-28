@@ -73,7 +73,7 @@ def enviar_emails():
         sheets = xls.sheet_names
         
         if len(sheets) > 1:
-            col1, col2, col3 = st.columns(3)
+            col1, col2, col3, col4 = st.columns(4)
             with col1:
                 sheet_name = st.selectbox("Selecione a aba do Excel que deseja usar", sheets)
         else:
@@ -83,24 +83,24 @@ def enviar_emails():
         st.write("Arquivo carregado com sucesso!")
         st.write(df.head())
         
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             col_email = st.selectbox("Selecione a coluna com os e-mails", df.columns.tolist())
         
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             enviar_anexos = st.checkbox("Deseja enviar anexos?", value=True)
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         if enviar_anexos:
             with col1:
                 col_arquivo = st.selectbox("Selecione a coluna com os nomes dos arquivos", df.columns.tolist())
         else:
             col_arquivo = None
         
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             usar_cc = st.checkbox("Deseja adicionar e-mails em Cópia (CC)?")
-        col1, col2, col3 = st.columns(3)    
+        col1, col2, col3, col4 = st.columns(4)    
         if usar_cc:
             with col1:
                 col_cc = st.selectbox("Selecione a coluna com os e-mails em Cópia", df.columns.tolist())
@@ -116,7 +116,7 @@ def enviar_emails():
                 st.write("Todos os e-mails serão processados.")
             else:
                 unique_emails = df[col_email].dropna().unique().tolist()
-                col1, col2, col3 = st.columns(3)
+                col1, col2, col3, col4 = st.columns(4)
                 with col1:
                     selected_emails = st.multiselect("Selecione os e-mails que deseja processar", options=unique_emails)
             
@@ -152,7 +152,7 @@ def enviar_emails():
                         if all(file_name in expected_file_names for file_name in file_names):
                             st.success("Todos os anexos estão corretos.")
                             subject = st.text_input("Título do E-mail")
-                            col1, col2, col3 = st.columns(3)
+                            col1, col2, col3, col4 = st.columns(4)
                             incluir_saudacao = col1.checkbox("Deseja incluir uma saudação?", value=False)  # Checkbox para incluir saudação
                             
                             # Definindo a coluna de nome apenas se a saudação for incluída
