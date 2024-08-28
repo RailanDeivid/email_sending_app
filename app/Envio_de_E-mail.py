@@ -73,7 +73,9 @@ def enviar_emails():
         sheets = xls.sheet_names
         
         if len(sheets) > 1:
-            sheet_name = st.selectbox("Selecione a aba do Excel que deseja usar", sheets)
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                sheet_name = st.selectbox("Selecione a aba do Excel que deseja usar", sheets)
         else:
             sheet_name = sheets[0]
         
