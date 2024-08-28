@@ -10,7 +10,7 @@ Este aplicativo foi criado para resolver o problema de envio de e-mails em massa
 
 ## Descrição
 
-* **Registro de E-mail Remetente:** Permite ao usuário cadastrar seu e-mail e credenciais para envio.
+* **Registro de E-mail Remetente:** Permite ao usuário cadastrar seu e-mail e credenciais para envio **(O e-mail e senha colocados não são salvo em nenhum lugar, é totalmente seguro. Ficam salvo apenas em cash para realizar os disparos. basta um F5 na pagina e já são apagados)**.
 * **Upload de Arquivo Excel:** O usuário pode carregar um arquivo Excel contendo os e-mails dos destinatários e outros dados necessários.
 * **Personalização de Mensagens:** Opção de personalizar as mensagens com o nome do destinatário e incluir uma saudação baseada no horário (Bom dia, Boa tarde, Boa noite).
 * **Envio em Massa:** Possibilidade de enviar e-mails para todos os destinatários listados no arquivo Excel de uma só vez.
