@@ -63,7 +63,6 @@ def usar_credenciais():
 
 
 # Função de envio de emails
-# Função de envio de emails
 def enviar_emails():
     st.title("Envio de Emails em Massa")
 
@@ -93,16 +92,21 @@ def enviar_emails():
         with col1:
             enviar_anexos = st.checkbox("Deseja enviar anexos?", value=False)
         col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            col_arquivo = st.selectbox("Selecione a coluna com os nomes dos arquivos", df.columns.tolist()) if enviar_anexos else None
+        if enviar_anexos:
+            with col1:
+                col_arquivo = st.selectbox("Selecione a coluna com os nomes dos arquivos", df.columns.tolist())
+        else:
+            col_arquivo = None
         
         col1, col2, col3, col4 = st.columns(4)
         with col1:
             usar_cc = st.checkbox("Deseja adicionar e-mails em Cópia (CC)?")
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            col_cc = st.selectbox("Selecione a coluna com os e-mails em Cópia", df.columns.tolist()) if usar_cc else None
-        
+        col1, col2, col3, col4 = st.columns(4)    
+        if usar_cc:
+            with col1:
+                col_cc = st.selectbox("Selecione a coluna com os e-mails em Cópia", df.columns.tolist())
+        else:
+            col_cc = None
         
         if col_email and (not enviar_anexos or col_arquivo):
             selecionar_todos = st.checkbox("Selecionar todos os e-mails", value=True)
@@ -144,14 +148,13 @@ def enviar_emails():
                             st.success("Todos os anexos estão corretos.")
                             subject = st.text_input("Título do E-mail")
                             col1, col2, col3, col4 = st.columns(4)
-                            with col1:
-                                incluir_saudacao = col1.checkbox("Deseja incluir uma saudação?", value=False)
+                            incluir_saudacao = col1.checkbox("Deseja incluir uma saudação?", value=False)
                             
                             if incluir_saudacao:
                                 col_nome = col1.selectbox("Selecione a coluna com os nomes", df.columns.tolist())
                             else:
                                 col_nome = None
-                                
+                            
                             body = st.text_area("Corpo do E-mail")
                             cc_emails_global = st.text_input("CC Global: Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
 
@@ -170,7 +173,7 @@ def enviar_emails():
                                         file = next(file for file in uploaded_files if file.name == file_name)
                                         send_email(email, file, subject, corpo_email, cc_emails_global + cc_emails_spec)
                                         st.success(f"Email enviado para {email} com o anexo {file_name[:-5]} e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
-                                    else:
+                                    elif not enviar_anexos:
                                         send_email(email, None, subject, corpo_email, cc_emails_global + cc_emails_spec)
                                         st.success(f"Email enviado para {email} sem anexo e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
                                         
@@ -202,7 +205,6 @@ def enviar_emails():
                 st.error("Por favor, selecione ao menos um e-mail para processar.")
         else:
             st.error("Por favor, selecione todas as colunas necessárias.")
-
 
 # Função para obter a saudação com base na hora do dia e nome do destinatário
 def obter_saudacao(nome):
