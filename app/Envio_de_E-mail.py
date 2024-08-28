@@ -21,7 +21,9 @@ st.set_page_config(
 # Função para cadastrar o email do remetente
 def cadastrar_remetente():
     st.title("Cadastro de Email do Remetente")
-    st.error("O e-mail e senha colocados não são salvo em nenhum lugar. É totalmente seguro. Ficam salvos apenas em cash para realizar os disparos. basta um F5 na pagina e já são apagados")
+    col1, col2, col3 = st.columns([1,20,1])
+    with col2:
+        st.error("O e-mail e senha colocados não são salvo em nenhum lugar. É totalmente seguro. Ficam salvos apenas em cash para realizar os disparos. basta um F5 na pagina e já são apagados")
     # Formulário para o usuário inserir as credenciais
     with st.form(key="form_remetente"):
         email = st.text_input("Email")
@@ -42,7 +44,9 @@ def cadastrar_remetente():
                 st.session_state["email"] = email
                 st.session_state["senha"] = senha
                 st.session_state["provedor"] = provedor
-                st.success(f"Email cadastrado com sucesso como {provedor}!")
+                col1, col2, col3 = st.columns([1,0.9,1])
+                with col2:
+                    st.success(f"Email cadastrado com sucesso como {provedor}!")
 
 
 
@@ -53,12 +57,18 @@ def usar_credenciais():
     provedor = st.session_state.get("provedor", None)
     
     if email and senha:
-        st.success("Remetente cadastrado!")
-        st.write(f"Email cadastrado: {email}")
-        st.write(f"Provedor: {provedor}")
+        col1, col2, col3 = st.columns([1,0.34,1])
+        with col2:
+            st.success("Remetente cadastrado!")
+        col1, col2, col3 = st.columns([1,1,1])
+        with col2:
+            st.success(f"Email cadastrado: {email}")
+            st.success(f"Provedor: {provedor}")
         return True
     else:
-        st.error("Nenhum email cadastrado. Por favor, cadastre o remetente na página de Cadastro de Remetente.")
+        col1, col2, col3 = st.columns([1,2,1])
+        with col2:
+            st.error("Nenhum email cadastrado. Por favor, cadastre o remetente na página de Cadastro de Remetente.")
         return False
 
 
@@ -130,20 +140,26 @@ def enviar_emails():
             
             if selected_emails:
                 df_selecionado = df[df[col_email].isin(selected_emails)]
-                
-                configuracoes = f"\nColuna de e-mails: {col_email}"
+                configuracoes = f"""\nColuna de e-mails: {col_email}
+                                """
                 
                 if enviar_anexos:
-                    configuracoes += f"\nColuna de arquivos: {col_arquivo}"
+                    configuracoes += f"""\nColuna de arquivos: {col_arquivo}
+                                    """
                 
                 if col_cc:
-                    configuracoes += f"\nColuna de CC: {col_cc}"
+                    configuracoes += f"""\nColuna de CC: {col_cc}
+                    """
                 
                 st.header('Configurações definidas:')
-                st.success(configuracoes)
+                col1, col2, col3 = st.columns([0.8,1,1])
+                with col1:
+                    st.success(configuracoes)
                 
                 if enviar_anexos:
-                    st.warning("Agora, faça o upload dos arquivos anexos. Certifique-se de que os arquivos tenham os mesmos nomes listados na coluna selecionada.")
+                    col1, col2, col3 = st.columns([1,4.5,1])
+                    with col2:
+                        st.warning("Agora, faça o upload dos arquivos anexos. Certifique-se de que os arquivos tenham os mesmos nomes listados na coluna selecionada.")
                     
                     uploaded_files = st.file_uploader("Escolha os arquivos anexos", type="xlsx", accept_multiple_files=True)
                     
@@ -153,7 +169,9 @@ def enviar_emails():
                         expected_file_names = df_selecionado[col_arquivo].dropna().unique().tolist()
                         
                         if all(file_name in expected_file_names for file_name in file_names):
-                            st.success("Todos os anexos estão corretos.")
+                            col1, col2, col3 = st.columns([0.47,1,1])
+                            with col1:
+                                st.success("Todos os anexos estão corretos.")
                             subject = st.text_input("Título do E-mail")
                             body = st.text_area("Corpo do E-mail")
                             cc_emails_global = st.text_input("CC Global: Copiado em todos os e-mails (Separados por vírgula)", "").split(',')
