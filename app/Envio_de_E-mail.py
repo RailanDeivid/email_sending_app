@@ -12,7 +12,7 @@ from streamlit_option_menu import option_menu
 # Define o layout da página
 st.set_page_config(
     page_title="Envio de email",
-    page_icon="../img/mail.png", 
+    page_icon=":email:", 
     initial_sidebar_state="expanded",
     layout="wide"
 )
