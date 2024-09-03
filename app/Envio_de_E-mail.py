@@ -159,7 +159,7 @@ def enviar_emails():
                 if enviar_anexos:
                     col1, col2, col3 = st.columns([1,4.5,1])
                     with col2:
-                        st.warning("Agora, faça o upload dos arquivos anexos. Certifique-se de que os arquivos tenham os mesmos nomes listados na coluna selecionada.")
+                        st.warning("Agora, faça o upload dos arquivos anexos. Certifique-se de que os arquivos tenham os mesmos nomes listados na coluna selecionada para (nomes dos arquivos).")
                     
                     uploaded_files = st.file_uploader("Escolha os arquivos anexos", type="xlsx", accept_multiple_files=True)
                     
