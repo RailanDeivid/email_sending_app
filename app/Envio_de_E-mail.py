@@ -187,10 +187,10 @@ def enviar_emails():
                                     
                                     if enviar_anexos and file_name in file_names:
                                         file = next(file for file in uploaded_files if file.name == file_name)
-                                        send_email(email, file, subject, corpo_email, cc_emails_global + cc_emails_spec)
+                                        config_email(email, file, subject, corpo_email, cc_emails_global + cc_emails_spec)
                                         st.success(f"Email enviado para {email} com o anexo {file_name[:-5]} e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
                                     elif not enviar_anexos:
-                                        send_email(email, None, subject, corpo_email, cc_emails_global + cc_emails_spec)
+                                        config_email(email, None, subject, corpo_email, cc_emails_global + cc_emails_spec)
                                         st.success(f"Email enviado para {email} sem anexo e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
                         else:
                             st.warning("Alguns anexos não correspondem aos nomes escolhidos como (nomes dos arquivos). Verifique se os arquivos estão corretos.")
@@ -206,7 +206,7 @@ def enviar_emails():
                             saudacao = obter_saudacao(nome) if incluir_saudacao and col_nome else ""
                             corpo_email = f"{saudacao}{body}"
                             cc_emails_spec = [cc.strip() for cc in row[col_cc].split(',')] if col_cc and pd.notna(row[col_cc]) else []
-                            send_email(email, None, subject, corpo_email, cc_emails_global + cc_emails_spec)
+                            config_email(email, None, subject, corpo_email, cc_emails_global + cc_emails_spec)
                             st.success(f"Email enviado para {email} sem anexo e em CC para {', '.join(cc_emails_global + cc_emails_spec)}.")
             else:
                 st.error("Por favor, selecione ao menos um e-mail para processar.")
@@ -233,7 +233,7 @@ def obter_saudacao(nome):
 
 
 # Função de ajustes de parâmetros para o envio do e-mail
-def send_email(to_email, attachment, subject, body, cc_emails):
+def config_email(to_email, attachment, subject, body, cc_emails):
     from_email = st.session_state["email"]
     password = st.session_state["senha"]
     provedor = st.session_state.get("provedor")
